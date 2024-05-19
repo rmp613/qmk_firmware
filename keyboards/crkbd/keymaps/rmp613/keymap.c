@@ -17,23 +17,18 @@
 
 enum custom_keycodes { // Make sure have the awesome keycode ready
   ALT_TAB = SAFE_RANGE,
-  TILDE,
-  LEFT_PAR,
-  RIGHT_PAR,
-  LEFT_CURLY,
-  RIGHT_CURLY,
-  CARET,
-    AMPERSAND,
+  CMD_GRAVE
 };
 // todo: combos
 enum combos {
     COMBO_LWR_ALT_TAB,
-    COMBO_Q,
-    COMBO_Z,
+    COMBO_LWR_CMD_GRV,
     COMBO_BASE_ENTER,
     COMBO_BASE_BKSPC,
     COMBO_BASE_ESC,
     COMBO_BASE_DEL,
+    COMBO_RAISE_DEL,
+    COMBO_LOWER_DEL,
     COMBO_BASE_TAB,
     COMBO_BASE_L_BRACKET,
     COMBO_BASE_R_BRACKET,
@@ -59,6 +54,11 @@ enum combos {
     COMBO_BASE_HASH,
     COMBO_BASE_AT,
     COMBO_BASE_BANG,
+    COMBO_BASE_QUOT,
+    COMBO_BASE_DBL_QUOT,
+    COMBO_BASE_QMARK,
+    COMBO_BASE_LT,
+    COMBO_BASE_GT,
 
 
     COMBO_LENGTH // nifty trick to avoid manually specifying how many combos you have
@@ -66,42 +66,50 @@ enum combos {
 
 uint16_t COMBO_LEN = COMBO_LENGTH; // nifty trick continued
 
-const uint16_t PROGMEM _04_combo[]  = {KC_0, KC_4, COMBO_END};
-const uint16_t PROGMEM q_combo[]  = {KC_X, KC_J, COMBO_END};
-const uint16_t PROGMEM z_combo[]  = {KC_F, KC_M, COMBO_END};
+const uint16_t PROGMEM lower_alt_tab_combo[]  = {KC_0, KC_4, COMBO_END};
+const uint16_t PROGMEM lower_cmd_grv_combo[]  = {KC_0, KC_5, COMBO_END};
 const uint16_t PROGMEM base_enter_combo[]  = {KC_S, KC_N, COMBO_END};
 const uint16_t PROGMEM base_backspace_combo[]  = {KC_T, KC_S, COMBO_END};
 const uint16_t PROGMEM base_del_combo[]  = {KC_RSFT, KC_T, KC_S, COMBO_END};
-const uint16_t PROGMEM base_esc_combo[]  = {KC_E, KC_A, COMBO_END};
+const uint16_t PROGMEM raise_del_combo[]  = {KC_UP, KC_DOWN, COMBO_END};
+const uint16_t PROGMEM lower_del_combo[]  = {KC_DOWN, KC_UP, COMBO_END};
+const uint16_t PROGMEM base_esc_combo[]  = {KC_I, KC_E, COMBO_END};
 const uint16_t PROGMEM base_tab_combo[]  = {KC_C, KC_I, COMBO_END};
 const uint16_t PROGMEM base_l_bracket_combo[] = {KC_Y, KC_O, COMBO_END};
 const uint16_t PROGMEM base_r_bracket_combo[] = {KC_O, KC_U, COMBO_END};
 const uint16_t PROGMEM base_l_parentheses_combo[] = {KC_L, KC_D, COMBO_END};
-const uint16_t PROGMEM base_r_parentheses_combo[] = {KC_O, KC_U, COMBO_END};
+const uint16_t PROGMEM base_r_parentheses_combo[] = {KC_D, KC_W, COMBO_END};
+const uint16_t PROGMEM base_l_sqly_combo[] = {KC_X, KC_J, COMBO_END};
+const uint16_t PROGMEM base_r_sqly_combo[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM base_semicolon_combo[] = {KC_T, KC_F, COMBO_END};
-const uint16_t PROGMEM base_colon_combo[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM base_colon_combo[] = {KC_M, KC_S, COMBO_END};
 const uint16_t PROGMEM base_equal_combo[] = {KC_X, KC_E, COMBO_END};
 const uint16_t PROGMEM base_plus_combo[] = {KC_A, KC_COMMA, COMBO_END};
-const uint16_t PROGMEM base_minus_combo[] = {KC_I, KC_E, COMBO_END};
-const uint16_t PROGMEM base_asterisk_combo[] = {KC_D, KC_T, COMBO_END};
-const uint16_t PROGMEM base_backslash_combo[] = {KC_W, KC_S, COMBO_END};
+const uint16_t PROGMEM base_minus_combo[] = {KC_G, KC_I, COMBO_END};
+const uint16_t PROGMEM base_asterisk_combo[] = {KC_T, KC_W, COMBO_END};
+const uint16_t PROGMEM base_backslash_combo[] = {KC_W, KC_N, COMBO_END};
 const uint16_t PROGMEM base_tilde_combo[] = {KC_C, KC_Y, COMBO_END};
-const uint16_t PROGMEM base_ampersand_combo[] = {KC_H, KC_L, COMBO_END};
-const uint16_t PROGMEM base_pipe_combo[] = {KC_S, KC_A, COMBO_END};
-const uint16_t PROGMEM base_caret_combo[] = {KC_DOT, KC_H, COMBO_END};
+const uint16_t PROGMEM base_ampersand_combo[] = {KC_S, KC_P, COMBO_END};
+const uint16_t PROGMEM base_pipe_combo[] = {KC_H, KC_T, COMBO_END};
+const uint16_t PROGMEM base_caret_combo[] = {KC_D, KC_S, COMBO_END};
 const uint16_t PROGMEM base_percent_combo[] = {KC_I, KC_O, COMBO_END};
 const uint16_t PROGMEM base_dollar_combo[] = {KC_A, KC_U, COMBO_END};
 const uint16_t PROGMEM base_hash_combo[] = {KC_O, KC_E, COMBO_END};
 const uint16_t PROGMEM base_at_combo[] = {KC_Y, KC_I, COMBO_END};
-const uint16_t PROGMEM base_bang_combo[] = {KC_O, KC_U, COMBO_END};
+const uint16_t PROGMEM base_bang_combo[] = {KC_O, KC_A, COMBO_END};
+const uint16_t PROGMEM base_quot_combo[] = {KC_H, KC_M, COMBO_END};
+const uint16_t PROGMEM base_dbl_quot_combo[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM base_qmark_combo[] = {KC_H, KC_D, COMBO_END};
+const uint16_t PROGMEM base_lt_combo[] = {KC_R, KC_M, COMBO_END};
+const uint16_t PROGMEM base_gt_combo[] = {KC_M, KC_F, COMBO_END};
+
 
 combo_t key_combos[] = {
-    [COMBO_LWR_ALT_TAB]    = COMBO(_04_combo, ALT_TAB),
+    [COMBO_LWR_ALT_TAB]    = COMBO(lower_alt_tab_combo, ALT_TAB),
     [COMBO_BASE_ENTER] = COMBO(base_enter_combo, KC_ENTER),
-    [COMBO_Q] = COMBO(q_combo, KC_Q),
-    [COMBO_Z] = COMBO(z_combo, KC_Z),
     [COMBO_BASE_BKSPC] = COMBO(base_backspace_combo, KC_BACKSPACE),
     [COMBO_BASE_DEL] = COMBO(base_del_combo, KC_DEL),
+    [COMBO_RAISE_DEL] = COMBO(raise_del_combo, KC_DEL),
     [COMBO_BASE_L_BRACKET] = COMBO(base_l_bracket_combo, KC_LEFT_BRACKET),
     [COMBO_BASE_R_BRACKET] = COMBO(base_r_bracket_combo, KC_RIGHT_BRACKET),
     [COMBO_BASE_ESC] = COMBO(base_esc_combo, KC_ESC),
@@ -113,10 +121,10 @@ combo_t key_combos[] = {
     [COMBO_BASE_ASTERISK] = COMBO(base_asterisk_combo, KC_ASTERISK),
     [COMBO_BASE_BACKSLASH] = COMBO(base_backslash_combo, KC_BACKSLASH),
     [COMBO_BASE_TILDE] = COMBO(base_tilde_combo, KC_TILD),
-    [COMBO_BASE_L_PAR] = COMBO(base_l_parentheses_combo, LEFT_PAR),
-    [COMBO_BASE_R_PAR] = COMBO(base_r_parentheses_combo, RIGHT_PAR),
-    [COMBO_BASE_L_CURLY] = COMBO(base_l_bracket_combo, LEFT_CURLY),
-    [COMBO_BASE_R_CURLY] = COMBO(base_r_bracket_combo, RIGHT_CURLY),
+    [COMBO_BASE_L_PAR] = COMBO(base_l_parentheses_combo, KC_LPRN),
+    [COMBO_BASE_R_PAR] = COMBO(base_r_parentheses_combo, KC_RPRN),
+    [COMBO_BASE_L_CURLY] = COMBO(base_l_bracket_combo, KC_LCBR),
+    [COMBO_BASE_R_CURLY] = COMBO(base_r_bracket_combo, KC_RCBR),
     [COMBO_BASE_AMPERSAND] = COMBO(base_ampersand_combo, KC_AMPERSAND),
     [COMBO_BASE_PIPE] = COMBO(base_pipe_combo, KC_PIPE),
     [COMBO_BASE_CARET] = COMBO(base_caret_combo, KC_GRAVE),
@@ -125,8 +133,11 @@ combo_t key_combos[] = {
     [COMBO_BASE_HASH] = COMBO(base_hash_combo, KC_HASH),
     [COMBO_BASE_AT] = COMBO(base_at_combo, KC_AT),
     [COMBO_BASE_BANG] = COMBO(base_bang_combo, KC_EXLM),
-
-
+    [COMBO_BASE_QUOT] = COMBO(base_quot_combo, KC_QUOTE),
+    [COMBO_BASE_DBL_QUOT] = COMBO(base_dbl_quot_combo, KC_DQUO),
+    [COMBO_BASE_QMARK] = COMBO(base_qmark_combo, KC_QUES),
+    [COMBO_BASE_LT] = COMBO(base_lt_combo, KC_LT),
+    [COMBO_BASE_GT] = COMBO(base_gt_combo, KC_GT)
 };
 
 // SUPER ALT TAB from https://docs.qmk.fm/#/feature_macros?id=super-alt%e2%86%aftab
@@ -139,7 +150,6 @@ int get_alt_tab_trigger() {
   }
   return KC_LALT;
 };
-
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) { // This will do most of the grunt work with the keycodes.
@@ -157,7 +167,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
 
     default:
-      if (is_alt_tab_active) {
+      if (is_alt_tab_active && keycode != KC_RIGHT_SHIFT) {
         unregister_code(get_alt_tab_trigger());
       }
   }
