@@ -17,7 +17,8 @@
 
 enum custom_keycodes { // Make sure have the awesome keycode ready
   ALT_TAB = SAFE_RANGE,
-  CMD_GRAVE
+  CMD_GRAVE,
+  CTRL_GUI
 };
 // todo: combos
 enum combos {
@@ -65,10 +66,10 @@ enum combos {
 };
 
 uint16_t COMBO_LEN = COMBO_LENGTH; // nifty trick continued
-
+// todo: add find,
 const uint16_t PROGMEM lower_alt_tab_combo[]  = {KC_0, KC_4, COMBO_END};
 const uint16_t PROGMEM lower_cmd_grv_combo[]  = {KC_0, KC_5, COMBO_END};
-const uint16_t PROGMEM base_enter_combo[]  = {KC_S, KC_N, COMBO_END};
+const uint16_t PROGMEM base_enter_combo[]  = {KC_H, KC_T, COMBO_END};
 const uint16_t PROGMEM base_backspace_combo[]  = {KC_T, KC_S, COMBO_END};
 const uint16_t PROGMEM base_del_combo[]  = {KC_RSFT, KC_T, KC_S, COMBO_END};
 const uint16_t PROGMEM raise_del_combo[]  = {KC_UP, KC_DOWN, COMBO_END};
@@ -79,12 +80,12 @@ const uint16_t PROGMEM base_l_bracket_combo[] = {KC_Y, KC_O, COMBO_END};
 const uint16_t PROGMEM base_r_bracket_combo[] = {KC_O, KC_U, COMBO_END};
 const uint16_t PROGMEM base_l_parentheses_combo[] = {KC_L, KC_D, COMBO_END};
 const uint16_t PROGMEM base_r_parentheses_combo[] = {KC_D, KC_W, COMBO_END};
-const uint16_t PROGMEM base_l_sqly_combo[] = {KC_X, KC_J, COMBO_END};
-const uint16_t PROGMEM base_r_sqly_combo[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM base_l_curly_combo[] = {KC_X, KC_J, COMBO_END};
+const uint16_t PROGMEM base_r_curly_combo[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM base_semicolon_combo[] = {KC_T, KC_F, COMBO_END};
 const uint16_t PROGMEM base_colon_combo[] = {KC_M, KC_S, COMBO_END};
 const uint16_t PROGMEM base_equal_combo[] = {KC_X, KC_E, COMBO_END};
-const uint16_t PROGMEM base_plus_combo[] = {KC_A, KC_COMMA, COMBO_END};
+const uint16_t PROGMEM base_plus_combo[] = {KC_I, KC_J, COMBO_END};
 const uint16_t PROGMEM base_minus_combo[] = {KC_G, KC_I, COMBO_END};
 const uint16_t PROGMEM base_asterisk_combo[] = {KC_T, KC_W, COMBO_END};
 const uint16_t PROGMEM base_backslash_combo[] = {KC_W, KC_N, COMBO_END};
@@ -112,6 +113,10 @@ combo_t key_combos[] = {
     [COMBO_RAISE_DEL] = COMBO(raise_del_combo, KC_DEL),
     [COMBO_BASE_L_BRACKET] = COMBO(base_l_bracket_combo, KC_LEFT_BRACKET),
     [COMBO_BASE_R_BRACKET] = COMBO(base_r_bracket_combo, KC_RIGHT_BRACKET),
+    [COMBO_BASE_L_CURLY] = COMBO(base_l_curly_combo, KC_LCBR),
+    [COMBO_BASE_R_CURLY] = COMBO(base_r_curly_combo, KC_RCBR),
+    [COMBO_BASE_L_PAR] = COMBO(base_l_parentheses_combo, KC_LPRN),
+    [COMBO_BASE_R_PAR] = COMBO(base_r_parentheses_combo, KC_RPRN),
     [COMBO_BASE_ESC] = COMBO(base_esc_combo, KC_ESC),
     [COMBO_BASE_TAB] = COMBO(base_tab_combo, KC_TAB), [COMBO_BASE_SEMICOLON] = COMBO(base_semicolon_combo, KC_SEMICOLON),
     [COMBO_BASE_COLON] = COMBO(base_colon_combo, KC_COLON),
@@ -121,10 +126,6 @@ combo_t key_combos[] = {
     [COMBO_BASE_ASTERISK] = COMBO(base_asterisk_combo, KC_ASTERISK),
     [COMBO_BASE_BACKSLASH] = COMBO(base_backslash_combo, KC_BACKSLASH),
     [COMBO_BASE_TILDE] = COMBO(base_tilde_combo, KC_TILD),
-    [COMBO_BASE_L_PAR] = COMBO(base_l_parentheses_combo, KC_LPRN),
-    [COMBO_BASE_R_PAR] = COMBO(base_r_parentheses_combo, KC_RPRN),
-    [COMBO_BASE_L_CURLY] = COMBO(base_l_bracket_combo, KC_LCBR),
-    [COMBO_BASE_R_CURLY] = COMBO(base_r_bracket_combo, KC_RCBR),
     [COMBO_BASE_AMPERSAND] = COMBO(base_ampersand_combo, KC_AMPERSAND),
     [COMBO_BASE_PIPE] = COMBO(base_pipe_combo, KC_PIPE),
     [COMBO_BASE_CARET] = COMBO(base_caret_combo, KC_GRAVE),
@@ -137,7 +138,10 @@ combo_t key_combos[] = {
     [COMBO_BASE_DBL_QUOT] = COMBO(base_dbl_quot_combo, KC_DQUO),
     [COMBO_BASE_QMARK] = COMBO(base_qmark_combo, KC_QUES),
     [COMBO_BASE_LT] = COMBO(base_lt_combo, KC_LT),
-    [COMBO_BASE_GT] = COMBO(base_gt_combo, KC_GT)
+    [COMBO_BASE_GT] = COMBO(base_gt_combo, KC_GT),
+    [COMBO_LOWER_DEL] = COMBO(lower_del_combo, KC_DEL),
+    [COMBO_LWR_CMD_GRV] = COMBO(lower_cmd_grv_combo, CMD_GRAVE),
+
 };
 
 // SUPER ALT TAB from https://docs.qmk.fm/#/feature_macros?id=super-alt%e2%86%aftab
@@ -145,6 +149,14 @@ bool     is_alt_tab_active = false; // ADD this near the beginning of keymap.c
 uint16_t alt_tab_timer     = 0;     // we will be using them soon.
 int get_alt_tab_trigger(void);
 int get_alt_tab_trigger() {
+  if (detected_host_os() == OS_MACOS) {
+    return KC_LGUI;
+  }
+  return KC_LALT;
+};
+
+int get_ctrl_gui(void);
+int get_ctrl_gui() {
   if (detected_host_os() == OS_MACOS) {
     return KC_LGUI;
   }
@@ -165,7 +177,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         unregister_code(KC_TAB);
       }
       break;
-
+    case CMD_GRAVE:
+        if (record->event.pressed) {
+        if (!is_alt_tab_active) {
+          is_alt_tab_active = true;
+          register_code(get_alt_tab_trigger());
+        }
+        alt_tab_timer = timer_read();
+        register_code(KC_GRAVE);
+      } else {
+        unregister_code(KC_GRAVE);
+      }
+        break;
+    case CTRL_GUI:
+        if (record->event.pressed) {
+            register_code(get_ctrl_gui());
+        } else {
+            unregister_code(get_ctrl_gui());
+        }
+        break;
     default:
       if (is_alt_tab_active && keycode != KC_RIGHT_SHIFT) {
         unregister_code(get_alt_tab_trigger());
@@ -280,15 +310,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------+--------'  `--------+--------+--------+--------+--------+--------+--------|
       XXXXXXX,    KC_G,    KC_X,    KC_J,    KC_K,KC_MINUS,                      KC_SLSH,    KC_R,    KC_M,    KC_F,    KC_P, KC_LSFT,
   //|--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LALT, TL_LOWR,  KC_SPC,   KC_RCTL, TL_UPPR, KC_RSFT
+                                         CTRL_GUI, TL_LOWR,  KC_SPC,    KC_LALT, TL_UPPR, KC_RSFT
                                       //`--------------------------'  `--------------------------'
   ),
-
+// todo: swap hands to allow shortcuts and modifiers on left hand for mouse use
+// this also means adjusting the combos that rely on this layer
   [1] = LAYOUT_split_3x6_3_ex2(
   //,--------------------------------------------------------------.  ,--------------------------------------------------------------.
       XXXXXXX, XXXXXXX,    KC_7,    KC_8,    KC_9, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-      XXXXXXX,    KC_0,    KC_4,    KC_5,    KC_6, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX,
+      XXXXXXX,    KC_0,    KC_4,    KC_5,    KC_6, XXXXXXX, XXXXXXX, XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------'  `--------+--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX,    KC_1,    KC_2,    KC_3, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------|
