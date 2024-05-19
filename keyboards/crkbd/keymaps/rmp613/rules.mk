@@ -1,6 +1,6 @@
-VIAL_ENABLE          = yes
+VIA_ENABLE           = yes
 ENCODER_MAP_ENABLE   = no
-PERMISSIVE_HOLD      = yes
+# PERMISSIVE_HOLD      = yes
 TRI_LAYER_ENABLE     = yes
 CAPS_WORD_ENABLE     = yes
 KEY_OVERRIDE_ENABLE  = yes
@@ -20,5 +20,5 @@ GRAVE_ESC_ENABLE     = no
 MAGIC_ENABLE         = no
 # MUSIC_ENABLE = no
 
-SRC += features/achordion.c
-SRC += features/custom_shift_keys.c
+# SRC += features/achordion.c
+# SRC += features/custom_shift_keys.c
