@@ -18,12 +18,12 @@
 enum custom_keycodes { // Make sure have the awesome keycode ready
     ALT_TAB = SAFE_RANGE,
     CMD_GRAVE,
-    CTRL_GUI,
     FIND,
     CUT,
     COPY,
     PASTE,
-    UNDO
+    UNDO,
+    OS_CG // CTRL or GUI depending on OS
 };
 // todo: combos
 enum combos {
@@ -72,13 +72,13 @@ enum combos {
 
 uint16_t COMBO_LEN = COMBO_LENGTH; // nifty trick continued
 // todo: add find,
-const uint16_t PROGMEM lower_alt_tab_combo[]      = {KC_0, KC_4, COMBO_END};
-const uint16_t PROGMEM lower_cmd_grv_combo[]      = {KC_4, KC_5, COMBO_END};
+const uint16_t PROGMEM lower_alt_tab_combo[]      = {KC_LEFT, KC_DOWN, COMBO_END};
+const uint16_t PROGMEM lower_cmd_grv_combo[]      = {KC_DOWN, KC_UP, COMBO_END};
 const uint16_t PROGMEM base_enter_combo[]         = {KC_H, KC_T, COMBO_END};
 const uint16_t PROGMEM base_backspace_combo[]     = {KC_T, KC_S, COMBO_END};
 const uint16_t PROGMEM base_del_combo[]           = {KC_RSFT, KC_T, KC_S, COMBO_END};
-const uint16_t PROGMEM raise_del_combo[]          = {KC_UP, KC_DOWN, COMBO_END};
-const uint16_t PROGMEM lower_del_combo[]          = {KC_DOWN, KC_UP, COMBO_END};
+const uint16_t PROGMEM raise_del_combo[]          = {KC_5, KC_6, COMBO_END};
+const uint16_t PROGMEM lower_del_combo[]          = {KC_5, KC_6, COMBO_END};
 const uint16_t PROGMEM base_esc_combo[]           = {KC_I, KC_E, COMBO_END};
 const uint16_t PROGMEM base_tab_combo[]           = {KC_C, KC_I, COMBO_END};
 const uint16_t PROGMEM base_l_bracket_combo[]     = {KC_Y, KC_O, COMBO_END};
@@ -165,7 +165,24 @@ int get_ctrl_gui() {
     if (detected_host_os() == OS_MACOS) {
         return KC_LGUI;
     }
-    return KC_LALT;
+    return KC_LCTL;
+};
+int CTRL_GUI(int);
+int CTRL_GUI(int key) {
+    if (detected_host_os() == OS_MACOS) {
+        return LGUI(key);
+    }
+    return LCTL(key);
+};
+
+void handle_ctrl_gui(keyrecord_t *record, uint16_t keycode) {
+    if (record->event.pressed) {
+        register_code(get_ctrl_gui());
+        register_code(keycode);
+    } else {
+        unregister_code(keycode);
+        unregister_code(get_ctrl_gui());
+    }
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -194,48 +211,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_GRAVE);
             }
             break;
-        case CTRL_GUI:
+
+        case OS_CG:
             if (record->event.pressed) {
                 register_code(get_ctrl_gui());
             } else {
                 unregister_code(get_ctrl_gui());
             }
             break;
+
         case FIND:
-            if (record->event.pressed) {
-                register_code(get_ctrl_gui());
-                tap_code(KC_F);
-                unregister_code(get_ctrl_gui());
-            }
+            handle_ctrl_gui(record, KC_F);
             break;
         case CUT:
-            if (record->event.pressed) {
-                register_code(get_ctrl_gui());
-                tap_code(KC_X);
-                unregister_code(get_ctrl_gui());
-            }
+            handle_ctrl_gui(record, KC_X);
             break;
         case COPY:
-            if (record->event.pressed) {
-                register_code(get_ctrl_gui());
-                tap_code(KC_C);
-                unregister_code(get_ctrl_gui());
-            }
+            handle_ctrl_gui(record, KC_C);
             break;
         case PASTE:
-            if (record->event.pressed) {
-                register_code(get_ctrl_gui());
-                tap_code(KC_V);
-                unregister_code(get_ctrl_gui());
-            }
+            handle_ctrl_gui(record, KC_V);
             break;
         case UNDO:
-            if (record->event.pressed) {
-                register_code(get_ctrl_gui());
-                tap_code(KC_Z);
-                register_code(get_ctrl_gui());
-            }
+            handle_ctrl_gui(record, KC_Z);
             break;
+
         default:
             if (is_alt_tab_active && keycode != KC_RIGHT_SHIFT) {
                 unregister_code(get_alt_tab_trigger());
@@ -341,6 +341,7 @@ void matrix_scan_user(void) { // The very important timer.
 // }
 
 // clang-format off
+#ifdef LAYOUT_split_3x6_3_ex2
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3_ex2(
   //,--------------------------------------------------------------.  ,--------------------------------------------------------------.
@@ -350,7 +351,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------+--------'  `--------+--------+--------+--------+--------+--------+--------|
       XXXXXXX,    KC_G,    KC_X,    KC_J,    KC_K,KC_MINUS,                      KC_SLSH,    KC_R,    KC_M,    KC_F,    KC_P, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------|
-                                         CTRL_GUI, TL_LOWR,  KC_SPC,    KC_LALT, TL_UPPR, KC_RSFT
+                                            OS_CG, TL_LOWR,  KC_SPC,    KC_LALT, TL_UPPR, KC_RSFT
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -390,4 +391,5 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       //`--------------------------'  `--------------------------'
   )
 };
+#endif
 // clang-format on

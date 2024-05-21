@@ -1,4 +1,3 @@
-VIA_ENABLE           = yes
 ENCODER_MAP_ENABLE   = no
 # PERMISSIVE_HOLD      = yes
 TRI_LAYER_ENABLE     = yes
@@ -18,6 +17,7 @@ OLED_ENABLE          = no  # Disable OLED display support
 SPACE_CADET_ENABLE   = no
 GRAVE_ESC_ENABLE     = no
 MAGIC_ENABLE         = no
+LTO_ENABLE           = yes
 # MUSIC_ENABLE = no
 
 # SRC += features/achordion.c
