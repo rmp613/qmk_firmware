@@ -3,11 +3,13 @@
 #define MATRIX_ROWS 8
 #define MATRIX_COLS 7
 
-
 #define MATRIX_ROWS_PER_SIDE (MATRIX_ROWS / 2)
 #define MATRIX_COLS_PER_SIDE (MATRIX_COLS / 2)
 // Time (in ms) for combo processing
 #define COMBO_TERM 20
+#define COMBO_MUST_HOLD_MODS
+#define COMBO_TERM_PER_COMBO
+
 // Don't allow macro calls in macros
 #define DYNAMIC_MACRO_NO_NESTING
 

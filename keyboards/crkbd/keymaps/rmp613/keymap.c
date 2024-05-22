@@ -66,11 +66,12 @@ enum combos {
     COMBO_BASE_LT,
     COMBO_BASE_GT,
     COMBO_LWR_FIND,
+    COMBO_CTRL,
 
     COMBO_LENGTH // nifty trick to avoid manually specifying how many combos you have
 };
 
-uint16_t COMBO_LEN = COMBO_LENGTH; // nifty trick continued
+const uint16_t COMBO_LEN = COMBO_LENGTH; // nifty trick continued
 // todo: add find,
 const uint16_t PROGMEM lower_alt_tab_combo[]      = {KC_LEFT, KC_DOWN, COMBO_END};
 const uint16_t PROGMEM lower_cmd_grv_combo[]      = {KC_DOWN, KC_UP, COMBO_END};
@@ -81,12 +82,12 @@ const uint16_t PROGMEM raise_del_combo[]          = {KC_5, KC_6, COMBO_END};
 const uint16_t PROGMEM lower_del_combo[]          = {KC_5, KC_6, COMBO_END};
 const uint16_t PROGMEM base_esc_combo[]           = {KC_I, KC_E, COMBO_END};
 const uint16_t PROGMEM base_tab_combo[]           = {KC_C, KC_I, COMBO_END};
-const uint16_t PROGMEM base_l_bracket_combo[]     = {KC_Y, KC_O, COMBO_END};
-const uint16_t PROGMEM base_r_bracket_combo[]     = {KC_O, KC_U, COMBO_END};
-const uint16_t PROGMEM base_l_parentheses_combo[] = {KC_L, KC_D, COMBO_END};
+const uint16_t PROGMEM base_l_bracket_combo[]     = {KC_O, KC_A, COMBO_END};
+const uint16_t PROGMEM base_r_bracket_combo[]     = {KC_H, KC_D, COMBO_END};
+const uint16_t PROGMEM base_l_parentheses_combo[] = {KC_Y, KC_O, COMBO_END};
 const uint16_t PROGMEM base_r_parentheses_combo[] = {KC_D, KC_W, COMBO_END};
 const uint16_t PROGMEM base_l_curly_combo[]       = {KC_X, KC_J, COMBO_END};
-const uint16_t PROGMEM base_r_curly_combo[]       = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM base_r_curly_combo[]       = {KC_M, KC_F, COMBO_END};
 const uint16_t PROGMEM base_semicolon_combo[]     = {KC_T, KC_F, COMBO_END};
 const uint16_t PROGMEM base_colon_combo[]         = {KC_M, KC_S, COMBO_END};
 const uint16_t PROGMEM base_equal_combo[]         = {KC_X, KC_E, COMBO_END};
@@ -99,15 +100,16 @@ const uint16_t PROGMEM base_ampersand_combo[]     = {KC_S, KC_P, COMBO_END};
 const uint16_t PROGMEM base_pipe_combo[]          = {KC_I, KC_O, COMBO_END};
 const uint16_t PROGMEM base_carat_combo[]         = {KC_D, KC_S, COMBO_END};
 const uint16_t PROGMEM base_percent_combo[]       = {KC_W, KC_N, COMBO_END};
-const uint16_t PROGMEM base_dollar_combo[]        = {KC_A, KC_U, COMBO_END};
+const uint16_t PROGMEM base_dollar_combo[]        = {KC_E, KC_K, COMBO_END};
 const uint16_t PROGMEM base_hash_combo[]          = {KC_O, KC_E, COMBO_END};
 const uint16_t PROGMEM base_at_combo[]            = {KC_Y, KC_I, COMBO_END};
-const uint16_t PROGMEM base_bang_combo[]          = {KC_O, KC_A, COMBO_END};
+const uint16_t PROGMEM base_bang_combo[]          = {KC_O, KC_U, COMBO_END};
 const uint16_t PROGMEM base_quot_combo[]          = {KC_H, KC_M, COMBO_END};
 const uint16_t PROGMEM base_dbl_quot_combo[]      = {KC_R, KC_T, COMBO_END};
-const uint16_t PROGMEM base_qmark_combo[]         = {KC_H, KC_D, COMBO_END};
-const uint16_t PROGMEM base_lt_combo[]            = {KC_R, KC_M, COMBO_END};
-const uint16_t PROGMEM base_gt_combo[]            = {KC_M, KC_F, COMBO_END};
+const uint16_t PROGMEM base_qmark_combo[]         = {KC_L, KC_D, COMBO_END};
+const uint16_t PROGMEM base_lt_combo[]            = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM base_gt_combo[]            = {KC_R, KC_M, COMBO_END};
+const uint16_t PROGMEM ctrl_combo[]               = {OS_CG, KC_LALT, COMBO_END};
 
 combo_t key_combos[] = {
     [COMBO_LWR_ALT_TAB]    = COMBO(lower_alt_tab_combo, ALT_TAB),
@@ -146,7 +148,7 @@ combo_t key_combos[] = {
     [COMBO_BASE_GT]        = COMBO(base_gt_combo, KC_GT),
     [COMBO_LOWER_DEL]      = COMBO(lower_del_combo, KC_DEL),
     [COMBO_LWR_CMD_GRV]    = COMBO(lower_cmd_grv_combo, CMD_GRAVE),
-
+    [COMBO_CTRL] = COMBO(ctrl_combo, KC_LCTL)
 };
 
 // SUPER ALT TAB from https://docs.qmk.fm/#/feature_macros?id=super-alt%e2%86%aftab
@@ -184,6 +186,17 @@ void handle_ctrl_gui(keyrecord_t *record, uint16_t keycode) {
         unregister_code(get_ctrl_gui());
     }
 };
+
+uint16_t get_combo_term(uint16_t index, combo_t *combo) {
+    // decide by combo->keycode
+    switch (combo->keycode) {
+        case KC_LCTL:
+            return 80;
+    }
+
+    // or with combo index, i.e. its name from enum.
+    return COMBO_TERM;
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) { // This will do most of the grunt work with the keycodes.
