@@ -13,6 +13,8 @@
 // Don't allow macro calls in macros
 #define DYNAMIC_MACRO_NO_NESTING
 
+#define COMBO_ONLY_FROM_LAYER 0
+
 // Enable fast tapping (100ms) when typing fast.
 #define LEADER_TIMEOUT 350
 #define LEADER_PER_KEY_TIMING
