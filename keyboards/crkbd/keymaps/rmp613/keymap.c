@@ -207,22 +207,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             handle_ctrl_gui(record, KC_Z);
             break;
 
-        default:
-            if (is_alt_tab_active && keycode != KC_RIGHT_SHIFT) {
-                unregister_code(get_alt_tab_trigger());
-            }
     }
     return true;
 }
 
-void matrix_scan_user(void) { // The very important timer.
-    if (is_alt_tab_active) {
-        if (timer_elapsed(alt_tab_timer) > 1000) {
-            unregister_code(get_alt_tab_trigger());
-            is_alt_tab_active = false;
-        }
-    }
-}
 
 // bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, uint16_t other_keycode, keyrecord_t* other_record) {
 //     // Exceptionally consider the following chords as holds, even though they
